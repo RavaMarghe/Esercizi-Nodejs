@@ -1,5 +1,3 @@
-function sum() {
-    console.log(5 + 6);
-}
+module.exports = sum = (a, b) => console.log(a + b);
 
-sum();
+sum(5, 6);
