@@ -2,10 +2,10 @@ import supertest from "supertest";
 import app from "./app"
 const request = supertest(app)
 
-test("GET /numbers", async () => {
+test("GET /animals", async () => {
     const response = await request
-        .get("/numbers")
+        .get("/animals")
         .expect(200)
         .expect("Content-type", /application\/json/)
-    expect(response.body).toEqual([{ numbers: 12 }, { numbers: 73 }])
+    expect(response.body).toEqual([{ breed: "Penguin" }, { breed: "Bear" }])
 })

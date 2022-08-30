@@ -3,8 +3,8 @@ import "express-async-errors";
 
 const app = express();
 
-app.get("/numbers", (request, response) => {
-    response.json([{ numbers: 12 }, { numbers: 73 }]);
+app.get("/animals", (request, response) => {
+    response.json([{ breed: "Penguin" }, { breed: "Bear" }]);
 });
 
 export default app;
