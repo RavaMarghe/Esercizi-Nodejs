@@ -8,12 +8,22 @@ describe("GET /animals", () => {
     test("Valid request", async () => {
         const animals = [
             {
-                id: 1,
-                breed: "Penguin",
-                weight: 35,
-                name: null,
-                createdAt: "2022-08-31T11:19:56.696Z",
-                updatedAt: "2022-08-31T11:18:58.029Z",
+                id: 4,
+                name: "Mercury",
+                description: "",
+                diameter: 1234,
+                moons: 12,
+                createdAt: "2022-08-30T10:39:20.124Z",
+                updatedAt: "2022-08-30T10:39:47.286Z",
+            },
+            {
+                id: 5,
+                name: "Venus",
+                description: "",
+                diameter: 5678,
+                moons: 0,
+                createdAt: "2022-08-30T10:39:41.521Z",
+                updatedAt: "2022-08-30T10:39:28.601Z",
             },
         ];
 
@@ -28,29 +38,79 @@ describe("GET /animals", () => {
     });
 });
 
+describe("GET /animals/:id", () => {
+    test("Valid request", async () => {
+        const animal = {
+            id: 4,
+            name: "Mercury",
+            description: "",
+            diameter: 1234,
+            moons: 12,
+            createdAt: "2022-08-30T10:39:20.124Z",
+            updatedAt: "2022-08-30T10:39:47.286Z",
+        };
+
+        // @ts-ignore
+        prismaMock.animal.findUnique.mockResolvedValue(animal);
+
+        const response = await request
+            .get("/animals/4")
+            .expect(200)
+            .expect("Content-type", /application\/json/);
+        expect(response.body).toEqual(animal);
+    });
+
+    test("animal does not exist", async () => {
+        // @ts-ignore
+        prismaMock.animal.findUnique.mockResolvedValue(null);
+        const response = await request
+            .get("/animals/1")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot GET /animals/1");
+    });
+
+    test("Invalid animal ID", async () => {
+        const response = await request
+            .get("/animals/asdf")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot GET /animals/asdf");
+    });
+});
+
 describe("POST /animals", () => {
     test("Valid request", async () => {
-        const animal = [
-            {
-                breed: "Snake",
-                weight: 20,
-            },
-        ];
+        const animal = {
+            id: 4,
+            breed: "Snake",
+            weight: 20,
+            name: null,
+            createdAt: "2022-08-31T16:01:09.320Z",
+            updatedAt: "2022-08-31T16:01:09.321Z",
+        };
+
+        // @ts-ignore
+        prismaMock.animal.create.mockResolvedValue(animal);
 
         const response = await request
             .post("/animals")
-            .send(animal)
+            .send({
+                breed: "Snake",
+                weight: 20,
+            })
             .expect(201)
             .expect("Content-type", /application\/json/);
         expect(response.body).toEqual(animal);
     });
 
     test("Invalid request", async () => {
-        const animal = [
-            {
-                breed: "Snake",
-            },
-        ];
+        const animal = {
+            diameter: 1234,
+            moons: 12,
+        };
 
         const response = await request
             .post("/animals")
