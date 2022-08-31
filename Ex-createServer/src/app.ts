@@ -48,7 +48,27 @@ app.post(
     }
 );
 
+app.put(
+    "/animals/:id(\\d+)",
+    validate({ body: animalSchema }),
+    async (request, response, next) => {
+        const animalId = Number(request.params.id);
+        const animalData: AnimalData = request.body;
+
+        try {
+            const animal = await prisma.animal.update({
+                where: { id: animalId },
+                data: animalData,
+            });
+
+            response.status(200).json(animal);
+        } catch (error) {
+            response.status(404);
+            next(`Cannot PUT /animals/${animalId}`);
+        }
+    }
+);
+
 app.use(validationErrorMiddleware);
 
 export default app;
-

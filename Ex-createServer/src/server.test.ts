@@ -60,7 +60,7 @@ describe("GET /animals/:id", () => {
         expect(response.body).toEqual(animal);
     });
 
-    test("animal does not exist", async () => {
+    test("Animal does not exist", async () => {
         // @ts-ignore
         prismaMock.animal.findUnique.mockResolvedValue(null);
         const response = await request
@@ -122,5 +122,81 @@ describe("POST /animals", () => {
                 body: expect.any(Array),
             },
         });
+    });
+});
+
+describe("PUT /animals/:id", () => {
+    test("Valid request", async () => {
+        const animal = {
+            id: 1,
+            breed: "Penguin",
+            weight: 35,
+            name: null,
+            createdAt: "2022-08-31T11:19:56.696Z",
+            updatedAt: "2022-08-31T11:18:58.029Z",
+        };
+
+        // @ts-ignore
+        prismaMock.animal.update.mockResolvedValue(animal);
+
+        const response = await request
+            .put("/animals/6")
+            .send({
+                breed: "Penguin",
+                weight: 35,
+                name: "Flipper",
+                })
+            .expect(200)
+            .expect("Content-type", /application\/json/);
+        expect(response.body).toEqual(animal);
+    });
+
+    test("Invalid request", async () => {
+        const animal = {
+            diameter: 1234,
+            moons: 12,
+        };
+
+        const response = await request
+            .put("/animals/1")
+            .send(animal)
+            .expect(422)
+            .expect("Content-type", /application\/json/);
+        expect(response.body).toEqual({
+            errors: {
+                body: expect.any(Array),
+            },
+        });
+    });
+
+    test("animal does not exist", async () => {
+        // @ts-ignore
+        prismaMock.animal.update.mockRejectedValue(new Error("Error"));
+
+        const response = await request
+            .put("/animals/1")
+            .send({
+                breed: "Penguin",
+                weight: 35,
+                name: "Flipper",
+                })
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot PUT /animals/1");
+    });
+
+    test("Invalid animal ID", async () => {
+        const response = await request
+            .put("/animals/asdf")
+            .send({
+                breed: "Penguin",
+                weight: 35,
+                name: "Flipper",
+                })
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot PUT /animals/asdf");
     });
 });
