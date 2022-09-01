@@ -95,10 +95,8 @@ app.delete("/animals/:id(\\d+)", async (request, response, next) => {
 
 app.post(
     "/animals/:id(\\d+)/photo",
-    upload.single("photo"), //"photo" corrisponde al nome dell'input nel file web\upload.html
+    upload.single("photo"),
     async (request, response, next) => {
-        console.log("request.file", request.file);
-
         if (!request.file) {
             response.status(400);
             return next("No photo file uploaded.");
