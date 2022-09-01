@@ -234,7 +234,7 @@ describe("DELETE /animals/:id", () => {
     });
 });
 
-describe("POST /animals/:id/photo ", () => {
+describe("POST /animals/:id/photo", () => {
     test("Valid request with PNG file upload", async () => {
         await request
             .post("/animals/2/photo")
@@ -246,7 +246,7 @@ describe("POST /animals/:id/photo ", () => {
     test("Valid request with JPG file upload", async () => {
         await request
             .post("/animals/6/photo")
-            .attach("photo", "test-fixtures/photos/file.jpg")
+            .attach("photo", "Ex-createServer/test-fixtures/photos/file.jpg")
             .expect(201)
             .expect("Access-Control-Allow-Origin", "http://localhost:8080");
     });
@@ -254,7 +254,7 @@ describe("POST /animals/:id/photo ", () => {
     test("Invalid request with text file upload", async () => {
         const response = await request
             .post("/animals/6/photo")
-            .attach("photo", "test-fixtures/photos/file.txt")
+            .attach("photo", "Ex-createServer/test-fixtures/photos/file.txt")
             .expect(500)
             .expect("Content-Type", /text\/html/);
 
