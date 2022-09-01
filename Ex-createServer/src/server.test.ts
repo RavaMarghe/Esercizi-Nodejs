@@ -200,3 +200,31 @@ describe("PUT /animals/:id", () => {
         expect(response.text).toContain("Cannot PUT /animals/asdf");
     });
 });
+
+describe("DELETE /animals/:id", () => {
+    test("Valid request", async () => {
+        const response = await request.delete("/animals/4").expect(204);
+        expect(response.text).toEqual("");
+    });
+
+    test("animal does not exist", async () => {
+        // @ts-ignore
+        prismaMock.animal.delete.mockRejectedValue(new Error("Error"));
+        const response = await request
+            .delete("/animals/1")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot DELETE /animals/1");
+    });
+
+    test("Invalid animal ID", async () => {
+        const response = await request
+            .delete("/animals/asdf")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot DELETE /animals/asdf");
+    });
+});
+

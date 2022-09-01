@@ -69,6 +69,22 @@ app.put(
     }
 );
 
+app.delete("/animals/:id(\\d+)", async (request, response, next) => {
+    const animalId = Number(request.params.id);
+
+    try {
+        await prisma.animal.delete({
+            where: { id: animalId },
+        });
+
+        response.status(204).end();
+    } catch (error) {
+        response.status(404);
+        next(`Cannot DELETE /animals/${animalId}`);
+    }
+});
+
+
 app.use(validationErrorMiddleware);
 
 export default app;
