@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import prisma from "../lib/prisma/client";
-import { validate, animalSchema, AnimalData } from "../lib/validation";
+import { validate, animalSchema, AnimalData } from "../lib/middleware/validation";
 import { initMulterMiddleware } from "../lib/middleware/multer";
 
 const upload = initMulterMiddleware();
