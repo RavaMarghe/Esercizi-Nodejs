@@ -3,13 +3,13 @@
 <html>
     <body>
         <script>
-            async function fetchPlanets() {
-                const response = await fetch("http://localhost:3000/planets");
-                const planets = await response.json();
+            async function fetchanimals() {
+                const response = await fetch("http://localhost:3000/animals");
+                const animals = await response.json();
 
-                console.log({ planets });
+                console.log({ animals });
             }
-            fetchPlanets();
+            fetchanimals();
         </script>
     </body>
 </html>
