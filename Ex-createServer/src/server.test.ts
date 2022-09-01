@@ -243,6 +243,18 @@ describe("POST /animals/:id/photo ", () => {
             .expect("Access-Control-Allow-Origin", "http://localhost:8080");
     });
 
+    test("animal does not exist", async () => {
+        // @ts-ignore
+        prismaMock.animal.update.mockRejectedValue(new Error("Error"));
+
+        const response = await request
+            .post("/animals/2/photo")
+            .attach("photo", "Ex-createServer/test-fixtures/photos/file.png")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot POST /animals/2/photo");
+    });
 
     test("Invalid animal ID", async () => {
         const response = await request

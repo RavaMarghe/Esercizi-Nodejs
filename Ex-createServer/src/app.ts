@@ -95,7 +95,7 @@ app.delete("/animals/:id(\\d+)", async (request, response, next) => {
 
 app.post(
     "/animals/:id(\\d+)/photo",
-    upload.single("photo"),
+    upload.single("photo"), //"photo" corrisponde al nome dell'input nel file web\upload.html
     async (request, response, next) => {
         console.log("request.file", request.file);
 
@@ -104,11 +104,23 @@ app.post(
             return next("No photo file uploaded.");
         }
 
+        const animalId = Number(request.params.id);
         const photoFilename = request.file.filename;
 
-        response.status(201).json({ photoFilename });
+        try {
+            await prisma.animal.update({
+                where: { id: animalId },
+                data: { photoFilename },
+            });
+            response.status(201).json({ photoFilename });
+        } catch (error) {
+            response.status(404);
+            next(`Cannot POST /animals/${animalId}/photo`);
+        }
     }
 );
+
+app.use("/animals/photos", express.static("uploads"));
 
 app.use(validationErrorMiddleware);
 
