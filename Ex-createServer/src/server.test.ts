@@ -33,7 +33,8 @@ describe("GET /animals", () => {
         const response = await request
             .get("/animals")
             .expect(200)
-            .expect("Content-type", /application\/json/);
+            .expect("Content-type", /application\/json/)
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
         expect(response.body).toEqual(animals);
     });
 });
@@ -102,7 +103,8 @@ describe("POST /animals", () => {
                 weight: 20,
             })
             .expect(201)
-            .expect("Content-type", /application\/json/);
+            .expect("Content-type", /application\/json/)
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
         expect(response.body).toEqual(animal);
     });
 
@@ -145,9 +147,10 @@ describe("PUT /animals/:id", () => {
                 breed: "Penguin",
                 weight: 35,
                 name: "Flipper",
-                })
+            })
             .expect(200)
-            .expect("Content-type", /application\/json/);
+            .expect("Content-type", /application\/json/)
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
         expect(response.body).toEqual(animal);
     });
 
@@ -179,7 +182,7 @@ describe("PUT /animals/:id", () => {
                 breed: "Penguin",
                 weight: 35,
                 name: "Flipper",
-                })
+            })
             .expect(404)
             .expect("Content-Type", /text\/html/);
 
@@ -193,7 +196,7 @@ describe("PUT /animals/:id", () => {
                 breed: "Penguin",
                 weight: 35,
                 name: "Flipper",
-                })
+            })
             .expect(404)
             .expect("Content-Type", /text\/html/);
 
@@ -203,7 +206,10 @@ describe("PUT /animals/:id", () => {
 
 describe("DELETE /animals/:id", () => {
     test("Valid request", async () => {
-        const response = await request.delete("/animals/4").expect(204);
+        const response = await request
+            .delete("/animals/4")
+            .expect(204)
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
         expect(response.text).toEqual("");
     });
 
@@ -227,4 +233,3 @@ describe("DELETE /animals/:id", () => {
         expect(response.text).toContain("Cannot DELETE /animals/asdf");
     });
 });
-
