@@ -1,6 +1,6 @@
 import session from "express-session";
 
-import config from "../../config";
+import config from "../config";
 
 export function initSessionMiddleware() {
     return session({
@@ -9,3 +9,11 @@ export function initSessionMiddleware() {
         saveUninitialized: false,
     });
 }
+
+declare module "express-session" {
+    interface SessionData {
+        redirectTo: string;
+    }
+}
+
+export {};

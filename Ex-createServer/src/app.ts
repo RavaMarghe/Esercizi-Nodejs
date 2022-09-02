@@ -6,7 +6,8 @@ import { initCorsMiddleware } from "./lib/middleware/cors";
 import { initSessionMiddleware } from "./lib/middleware/session";
 import { passport } from "./lib/middleware/passport";
 
-import animalsRoutes from "./routes/animals"
+import animalsRoutes from "./routes/animals";
+import authRoutes from "./routes/auth";
 
 const app = express();
 
@@ -18,7 +19,8 @@ app.use(express.json());
 
 app.use(initCorsMiddleware());
 
-app.use("/animals", animalsRoutes)
+app.use("/animals", animalsRoutes);
+app.use("/auth", authRoutes);
 
 app.use(validationErrorMiddleware);
 

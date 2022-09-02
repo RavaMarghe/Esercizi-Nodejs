@@ -34,7 +34,9 @@ describe("GET /animals", () => {
             .get("/animals")
             .expect(200)
             .expect("Content-type", /application\/json/)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
+
         expect(response.body).toEqual(animals);
     });
 });
@@ -104,7 +106,9 @@ describe("POST /animals", () => {
             })
             .expect(201)
             .expect("Content-type", /application\/json/)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
+
         expect(response.body).toEqual(animal);
     });
 
@@ -150,7 +154,9 @@ describe("PUT /animals/:id", () => {
             })
             .expect(200)
             .expect("Content-type", /application\/json/)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
+
         expect(response.body).toEqual(animal);
     });
 
@@ -209,7 +215,9 @@ describe("DELETE /animals/:id", () => {
         const response = await request
             .delete("/animals/4")
             .expect(204)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
+
         expect(response.text).toEqual("");
     });
 
@@ -240,7 +248,8 @@ describe("POST /animals/:id/photo", () => {
             .post("/animals/2/photo")
             .attach("photo", "Ex-createServer/test-fixtures/photos/file.png")
             .expect(201)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
     });
 
     test("Valid request with JPG file upload", async () => {
@@ -248,7 +257,8 @@ describe("POST /animals/:id/photo", () => {
             .post("/animals/6/photo")
             .attach("photo", "Ex-createServer/test-fixtures/photos/file.jpg")
             .expect(201)
-            .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+            .expect("Access-Control-Allow-Origin", "http://localhost:8080")
+            .expect("Access-Control-Allow-Credentials", "true");
     });
 
     test("Invalid request with text file upload", async () => {
